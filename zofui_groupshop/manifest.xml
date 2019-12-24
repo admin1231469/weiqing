@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns="http://www.010xr.com" versionCode="0.8,1.0">
+	<application setting="true">
+		<name><![CDATA[众惠团购商城]]></name>
+		<identifie><![CDATA[zofui_groupshop]]></identifie>
+		<version><![CDATA[1.6.2]]></version>
+		<type><![CDATA[business]]></type>
+		<ability><![CDATA[众惠团购商城]]></ability>
+		<description><![CDATA[众惠团购商城]]></description>
+		<author><![CDATA[新睿社区]]></author>
+		<url><![CDATA[https://www.010xr.com]]></url>
+	</application>
+	<platform>
+		<subscribes>
+		</subscribes>
+		<handles>
+			<message type="text" />
+			<message type="image" />
+			<message type="voice" />
+			<message type="video" />
+			<message type="shortvideo" />
+			<message type="location" />
+			<message type="link" />
+			<message type="subscribe" />
+			<message type="qr" />
+			<message type="trace" />
+			<message type="click" />
+			<message type="merchant_order" />
+		</handles>
+		<rule embed="false" />
+		<card embed="false" />
+		<supports>
+			<item type="app" />
+                </supports>
+	</platform>
+	<bindings>
+		<cover>
+			<entry title="主页" do="index" state="" direct="false" />
+			<entry title="分类" do="sort" state="" direct="false" />
+			<entry title="购物车" do="cart" state="" direct="false" />
+			<entry title="个人中心" do="user" state="" direct="false" />
+			<entry title="充值中心" do="addmoney" state="" direct="false" />
+		</cover>
+		<menu>
+			<entry title="会员管理" do="user" state="" direct="false" />
+			<entry title="模块使用说明" do="index" state="" direct="false" />
+			<entry title="分类管理" do="sort" state="" direct="false" />
+			<entry title="运费模板" do="express" state="" direct="false" />
+			<entry title="商品管理" do="good" state="" direct="false" />
+			<entry title="卡券管理" do="card" state="" direct="false" />
+			<entry title="装修页面" do="custom" state="" direct="false" />
+			<entry title="订单管理" do="order" state="" direct="false" />
+			<entry title="团购管理" do="group" state="" direct="false" />
+			<entry title="评价管理" do="comment" state="" direct="false" />
+			<entry title="充值订单" do="addorder" state="" direct="false" />
+		</menu>
+	</bindings>
+	<permissions>
+	</permissions>
+	<install><![CDATA[CREATE TABLE IF NOT EXISTS `ims_zofui_groupshop_addorder` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) unsigned NOT NULL DEFAULT '0',
+  `userid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `openid` varchar(64) DEFAULT NULL,
+  `orderid` varchar(64) DEFAULT '' COMMENT 'a',
+  `uorderid` varchar(64) DEFAULT '' COMMENT 'a',
+  `totalmoney` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '总金额',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '0待支付 2已支付',
+  `createtime` int(11) unsigned NOT NULL DEFAULT '0',
+  `givemoney` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '赠送金额',
+  PRIMARY KEY (`id`),
+  KEY `uniacid` (`uniacid`),
+  KEY `userid` (`userid`),
+  KEY `openid` (`openid`),
+  KEY `orderid` (`orderid`),
+  KEY `uorderid` (`uorderid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_zofui_groupshop_card` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) unsigned NOT NULL DEFAULT '0',
+  `cardtype` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '卡券扣券',
+  `cardname` varchar(100) DEFAULT NULL COMMENT '卡券名称',
+  `needcredit` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '兑分',
+  `cardvalue` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '卡扣',
+  `fullmoney` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '订值',
+  `totalnum` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '优量',
+  `takednum` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '已量',
+  `lastnum` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '剩量',
+  `usednum` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '优惠加1',
+  `limitnum` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '限量',
+  `expire` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '领效',
+  `starttime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '可间',
+  `endtime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '可间',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '状架',
+  `time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '最改',
+  PRIMARY KEY (`id`),
+  KEY `index` (`uniacid`,`cardtype`,`lastnum`,`endtime`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='优惠券';
+CREATE TABLE IF NOT EXISTS `ims_zofui_groupshop_comment` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) unsigned NOT NULL DEFAULT '0',
+  `idoforder` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '对应的order的id',
+  `gid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '对应的商品id',
+  `pic` varchar(1000) DEFAULT NULL COMMENT '图片',
+  `text` varchar(800) DEFAULT NULL COMMENT '评价文字',
+  `status` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '是否显示 0显示 1不显示',
+  `level` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '评价等级 1好评 2中评 3差评',
+  `commenttime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '评价时间',
+  `headimg` varchar(255) DEFAULT NULL COMMENT '评价人头像',
+  `nickname` varchar(32) DEFAULT NULL COMMENT '评价人昵称',
+  PRIMARY KEY (`id`),
+  KEY `index` (`idoforder`,`gid`,`status`,`uniacid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='价';
+CREATE TABLE IF NOT EXISTS `ims_zofui_groupshop_custom` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(10) unsigned NOT NULL,
+  `params` longtext NOT NULL COMMENT '其据',
+  `type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '页页',
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是页',
+  `time` int(11) unsigned NOT NULL DEFAULT '0',
+  `basicparams` mediumtext COMMENT '页等',
+  `pagename` varchar(200) DEFAULT '' COMMENT '页称',
+  PRIMARY KEY (`id`),
+  KEY `uniacid` (`uniacid`,`type`,`status`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_zofui_groupshop_express` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(10) unsigned NOT NULL DEFAULT '0',
+  `name` varchar(200) DEFAULT NULL COMMENT '模称',
+  `expressarray` text COMMENT '运费等',
+  `time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '编间',
+  `defaultnum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '件',
+  `defaultmoney` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '用',
+  `defaultnumex` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '件',
+  `defaultmoneyex` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '用',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='运费';
+CREATE TABLE IF NOT EXISTS `ims_zofui_groupshop_good` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) unsigned NOT NULL DEFAULT '0',
+  `title` varchar(300) DEFAULT '' COMMENT '商题',
+  `descrip` varchar(1000) DEFAULT NULL COMMENT '述',
+  `oldprice` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '原',
+  `nowprice` decimal(10,2) unsigned NOT NULL DEFAULT '0.00',
+  `groupprice` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '价',
+  `groupnum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '数',
+  `groupendtime` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '团。',
+  `stock` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '存',
+  `sales` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '量',
+  `realsales` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '量',
+  `order` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '码',
+  `ruletype` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '格',
+  `rulearray` text COMMENT '组',
+  `inco` text COMMENT '签',
+  `expresstype` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '运板',
+  `expressid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'd',
+  `expressmoney` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '单额',
+  `iscredit` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是与',
+  `maxcredit` int(8) unsigned NOT NULL DEFAULT '0' COMMENT '分',
+  `isfreeexpress` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是与',
+  `fullmoney` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '额',
+  `isfirstcut` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '与',
+  `firstcutmoney` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '额',
+  `iscard` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '许',
+  `limitbuy` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '购',
+  `limittime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '限',
+  `limitnum` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '限',
+  `pic` text COMMENT '商品图片。取第一张作为封面图',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '架',
+  `params` text COMMENT '商组',
+  `detail` mediumtext COMMENT '情',
+  `createtime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '间',
+  `edittime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '间',
+  `usercredit` int(8) unsigned NOT NULL DEFAULT '0' COMMENT '分',
+  `familycredit` int(8) unsigned NOT NULL DEFAULT '0' COMMENT '分',
+  `isdust` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '除',
+  `isshowgroup` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `maxallow` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '最',
+  `isselftake` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0关闭上店自提 1开启',
+  `ismaxexpress` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0叠加 1不叠加运费',
+  `isexpress` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0叠加 1不叠加运费',
+  PRIMARY KEY (`id`),
+  KEY `index` (`uniacid`,`stock`,`status`,`isdust`,`isshowgroup`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_zofui_groupshop_goodsort` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) unsigned NOT NULL DEFAULT '0',
+  `gid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'd',
+  `sortid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'd',
+  PRIMARY KEY (`id`),
+  KEY `index` (`uniacid`,`gid`,`sortid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='类';
+CREATE TABLE IF NOT EXISTS `ims_zofui_groupshop_group` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) unsigned NOT NULL DEFAULT '0',
+  `gid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `status` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `fullnumber` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `lastnumber` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `overtime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `createtime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `createrid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `finishtime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '间',
+  `isrefund` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '是款',
+  PRIMARY KEY (`id`),
+  KEY `index` (`gid`,`uniacid`,`status`,`overtime`,`createrid`,`lastnumber`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_zofui_groupshop_order` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) unsigned NOT NULL DEFAULT '0',
+  `userid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `openid` varchar(64) DEFAULT NULL,
+  `orderid` varchar(64) DEFAULT '' COMMENT 'a',
+  `uorderid` varchar(64) DEFAULT '' COMMENT 'a',
+  `ordertype` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `paytype` varchar(20) DEFAULT NULL COMMENT 'a',
+  `groupid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `firstcutmoney` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'a',
+  `totalfreeexpress` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'a',
+  `totalexpress` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'a',
+  `cardcutmoney` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'a',
+  `cardid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `creditcut` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'a',
+  `credit` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'a',
+  `familycutmoney` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'a',
+  `totalmoney` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'a',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `refundstatus` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `refundmoney` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'a',
+  `name` varchar(20) DEFAULT NULL COMMENT 'a',
+  `tel` varchar(20) DEFAULT NULL COMMENT 'a',
+  `address` varchar(255) DEFAULT NULL COMMENT 'a',
+  `message` varchar(255) DEFAULT NULL COMMENT 'a',
+  `totalnum` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `createtime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `canceltime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `paytime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `sendtime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `confirmtime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `applyrefundtime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `refundtime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `cancelrefundtime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `refuserefundtime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `expressnumber` varchar(64) DEFAULT NULL COMMENT 'a',
+  `expressname` varchar(30) DEFAULT '' COMMENT 'a',
+  `isneedexpress` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `adminmark` varchar(200) DEFAULT NULL COMMENT 'a',
+  `comfiretype` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `isremind` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `iscomplete` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `sendtype` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0物流配送 1上店自提',
+  PRIMARY KEY (`id`),
+  KEY `index` (`uniacid`,`userid`,`openid`,`orderid`,`uorderid`,`cardid`,`status`,`name`,`tel`),
+  KEY `uniacid` (`uniacid`),
+  KEY `userid` (`userid`),
+  KEY `openid` (`openid`),
+  KEY `orderid` (`orderid`),
+  KEY `uorderid` (`uorderid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_zofui_groupshop_ordergood` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) unsigned NOT NULL DEFAULT '0',
+  `idoforder` int(11) NOT NULL DEFAULT '0' COMMENT 'a',
+  `gid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `pic` varchar(500) DEFAULT NULL COMMENT 'a',
+  `title` varchar(255) DEFAULT '' COMMENT 'a',
+  `rule` varchar(200) DEFAULT '' COMMENT 'a',
+  `buyprice` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'a',
+  `buynum` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `buyexpressmoney` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'a',
+  `buyfreeexpressmoney` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'a',
+  `buycardcutmoney` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'a',
+  `buyfamilycutmoney` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'a',
+  `buyfirstcutflag` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `buycreditflag` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `buymoney` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'a',
+  `iscomment` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  PRIMARY KEY (`id`),
+  KEY `index` (`uniacid`,`idoforder`,`gid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_zofui_groupshop_sort` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) unsigned NOT NULL DEFAULT '0',
+  `name` varchar(60) NOT NULL DEFAULT '0' COMMENT 'a',
+  `order` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `class` tinyint(2) unsigned NOT NULL DEFAULT '1' COMMENT 'a',
+  `parentid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `pic` varchar(350) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index` (`uniacid`,`parentid`,`class`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_zofui_groupshop_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) unsigned NOT NULL DEFAULT '0',
+  `openid` varchar(64) NOT NULL DEFAULT '0',
+  `nickname` varchar(64) NOT NULL DEFAULT '0',
+  `headimgurl` varchar(255) NOT NULL DEFAULT '0',
+  `logintime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `verify` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0未审核 1审核中 1通过审核',
+  `params` varchar(1500) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index` (`uniacid`,`openid`),
+  KEY `openid` (`openid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `ims_zofui_groupshop_usercard` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) unsigned NOT NULL DEFAULT '0',
+  `cardid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `userid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a a',
+  `openid` varchar(64) NOT NULL DEFAULT '' COMMENT 'a',
+  `status` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `overtime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `taketime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `usetime` int(11) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  PRIMARY KEY (`id`),
+  KEY `index` (`uniacid`,`cardid`,`userid`,`openid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='a';
+CREATE TABLE IF NOT EXISTS `ims_zofui_groupshop_waitmessage` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `uniacid` int(11) unsigned NOT NULL DEFAULT '0',
+  `type` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'a',
+  `str` varchar(64) DEFAULT NULL COMMENT 'a',
+  PRIMARY KEY (`id`),
+  KEY `index` (`type`,`uniacid`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='a';
+]]></install>
+	<uninstall><![CDATA[DROP TABLE IF EXISTS `ims_zofui_groupshop_addorder`;
+DROP TABLE IF EXISTS `ims_zofui_groupshop_card`;
+DROP TABLE IF EXISTS `ims_zofui_groupshop_comment`;
+DROP TABLE IF EXISTS `ims_zofui_groupshop_custom`;
+DROP TABLE IF EXISTS `ims_zofui_groupshop_express`;
+DROP TABLE IF EXISTS `ims_zofui_groupshop_good`;
+DROP TABLE IF EXISTS `ims_zofui_groupshop_goodsort`;
+DROP TABLE IF EXISTS `ims_zofui_groupshop_group`;
+DROP TABLE IF EXISTS `ims_zofui_groupshop_order`;
+DROP TABLE IF EXISTS `ims_zofui_groupshop_ordergood`;
+DROP TABLE IF EXISTS `ims_zofui_groupshop_sort`;
+DROP TABLE IF EXISTS `ims_zofui_groupshop_user`;
+DROP TABLE IF EXISTS `ims_zofui_groupshop_usercard`;
+DROP TABLE IF EXISTS `ims_zofui_groupshop_waitmessage`;
+]]></uninstall>
+	<upgrade><![CDATA[upgrade.php]]></upgrade>
+</manifest>

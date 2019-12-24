@@ -1,0 +1,34 @@
+{template 'common/myheader'}	
+<form action="{php echo $this->createMobileUrl('addmoney')}" method="post">	
+    <div id="page_addmoney" class="page page-current page_addmoney">
+		<div class="content ">
+
+			<div class="confirm_mobile confirm_item margin_top_5px">
+				<div class="guy_task_item weui_cells_form">
+					<div class="weui_cell guy_task_input item_cell_box">
+						<div>充值金额</div>
+						<div class="weui_cell_bd weui_cell_primary item_cell_flex">
+							<input type="text" name="money" class="mobile_input">
+						</div>
+					</div>
+				</div>
+			</div>
+			{if !empty( $give )}
+				<div style="padding: 10px;color: #999;">
+					{loop $give $item}
+						<p>充值满{php echo $item['num']*100/100}，赠送{php echo $item['give']*100/100}</p>
+					{/loop}
+				</div>
+			{/if}
+
+			<input type="hidden" name="token" value="{$_W['token']}">
+
+			<input type="submit" name="add" value="提交" class="good_btn" style="line-height: 2rem;border: 0;" />
+
+
+		</div>
+	</div>
+	
+</form>	
+{template 'common/myfooter'}
+	

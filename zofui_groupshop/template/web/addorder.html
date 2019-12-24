@@ -1,0 +1,92 @@
+{template 'common/header'}
+	<link href="../addons/zofui_groupshop/template/web/css/common.css" rel="stylesheet">
+	
+	
+<ul class="page_top">
+	<a href="{php echo $this->createWebUrl('addorder',array('op'=>'list','status'=>0))}">
+		<li class="top_btn {if $_GPC['status'] == 0}activity_bottom{/if}">所有订单</li>
+	</a>
+	<a href="{php echo $this->createWebUrl('addorder',array('op'=>'list','status'=>1))}">
+		<li class="top_btn {if $_GPC['status'] == 1}activity_bottom{/if}">已支付订单</li>
+	</a>	
+</ul>
+
+<div class="page_body">
+
+{if $op == 'list'}
+	
+	<div class="list_body">
+		<div class="list_table sort_list">
+<form action="" method="post">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th class="col-sm-1">
+								<label class="my_checkbox">
+								<input class="" type="checkbox" name="" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});"> 全选/取消
+								</label>
+							</th>
+							<th class="col-sm-1">订单id</th>
+							<th class="col-sm-1">支付者</th>
+							<th class="col-sm-1">金额</th>
+							<th class="col-sm-1">时间</th>
+							<th class="col-sm-1">状态</th>					
+							<th class="col-sm-1">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						{loop $list $li}
+						<tr>
+							<td class="">
+								<label class="my_checkbox">
+									<input type="checkbox" name="checkid[]" value="{$li['id']}" class=""> {$li['id']}
+								</label>
+							</td>
+							<td>
+								<p>{$li['uorderid']}</p>
+								<p>{$li['orderid']}</p>
+							</td>
+							<td>
+								{$li['user']['nickname']}
+							</td>
+							<td>
+								<p>充值{$li['totalmoney']}</p>
+								<p>赠送{$li['givemoney']}</p>
+							</td>
+							<td>
+								{php echo date('m-d H:i:s',$li['createtime'])}
+							</td>
+							<td>
+								{if $li['status'] == 0} 未支付{elseif $li['status'] == 1}已支付{/if}
+							</td>
+							<td class="opclass">
+								<a class="a_href" href="{php echo $this->createWebUrl('addorder',array('op'=>'delete','id'=>$li['id']))}" onclick="return confirm('删除后不可恢复，确定要删除吗？');">删除</a>								
+							</td>
+						</tr>
+						{/loop}						
+					</tbody>
+				</table>		
+			
+		</div>		
+		<div class="list_bottom item_cell_box sort_list">
+			<div class="item_cell_flex">
+				<label class="">
+					<input class="" type="checkbox" name="" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});"> 全选/取消
+				</label>&nbsp;&nbsp;&nbsp;
+				<input type="submit" name="delete" class="btn_44b549" value="删除所选" onclick="return confirm('删除后不可恢复，确定要删除吗？');">
+				<input name="token" type="hidden" value="{$_W['token']}" />
+			</div>
+			<div class="">{$pager}</div>
+		</div>
+</form>			
+	</div>
+	
+{/if}
+	
+</div>
+
+
+
+
+	<script src="../addons/zofui_groupshop/template/web/js/fsjs.js{php echo '?t='.TIMESTAMP}"></script>
+{template 'common/footer'}

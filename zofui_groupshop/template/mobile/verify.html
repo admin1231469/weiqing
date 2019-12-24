@@ -1,0 +1,90 @@
+{template 'common/myheader'}
+    <div id="page_verify" class="page page_verify page-current">
+		<div class="content" >
+			{if $userinfo['verify'] == 0}
+			<form>
+				<div class="form_list">
+					<div class="pb05 form_group item_cell_box">
+						<div class="form_title">
+							收件人名
+						</div>
+						<div class="form_right item_cell_flex item_cell_box">
+							<li class="item_cell_flex">
+								<input type="text" name="name" class="form_input form_into" value="" placeholder="输入收件人名称">
+							</li>
+							<li class="form_per"></li>
+						</div>
+					</div>
+					<div class="pb05 form_group item_cell_box">
+						<div class="form_title">
+							收件电话
+						</div>
+						<div class="form_right item_cell_flex item_cell_box">
+							<li class="item_cell_flex">
+								<input type="text" name="tel" class="form_input form_into" value="" placeholder="输入收件人电话">
+							</li>
+							<li class="form_per"></li>
+						</div>
+					</div>
+					<!-- <div class="pb05 form_group item_cell_box">
+						<div class="form_title">
+							所在省份
+						</div>
+						<div class="form_right item_cell_flex item_cell_box">
+							<li class="item_cell_flex">
+								<input type="text" name="pro" class="form_input form_into" value="" placeholder="输入省份">
+							</li>
+							<li class="form_per"></li>
+						</div>
+					</div>
+					<div class="pb05 form_group item_cell_box">
+						<div class="form_title">
+							所在城市
+						</div>
+						<div class="form_right item_cell_flex item_cell_box">
+							<li class="item_cell_flex">
+								<input type="text" name="city" class="form_input form_into" value="" placeholder="输入城市">
+							</li>
+							<li class="form_per"></li>
+						</div>
+					</div>
+					<div class="pb05 form_group item_cell_box">
+						<div class="form_title">
+							所在区县
+						</div>
+						<div class="form_right item_cell_flex item_cell_box">
+							<li class="item_cell_flex">
+								<input type="text" name="dis" class="form_input form_into" value="" placeholder="输入区县">
+							</li>
+							<li class="form_per"></li>
+						</div>
+					</div> -->
+					<div class="pb05 form_group item_cell_box">
+						<div class="form_title">
+							收件地址
+						</div>
+						<div class="form_right item_cell_flex item_cell_box">
+							<li class="item_cell_flex">
+								<input type="text" name="street" class="form_input form_into" value="" placeholder="输入街道地址">
+							</li>
+							<li class="form_per"></li>
+						</div>
+					</div>
+				</div>
+
+			</form>
+		  	<div class="popup_bot pd05">
+		  		<a href="javascript:;" class="popup_btn popup_confirm" id="sub">提交验证</a>
+		  	</div>
+			{elseif $userinfo['verify'] == 1}
+				<div style="text-align: center;padding-top: 200px;">审核中</div>
+			{elseif $userinfo['verify'] == 2}
+				<div style="text-align: center;padding-top: 200px;">已通过审核</div>
+			{/if}
+		</div>
+
+
+	</div>
+
+
+{template 'common/myfooter'}
